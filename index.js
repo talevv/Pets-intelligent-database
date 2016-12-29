@@ -18,7 +18,7 @@ app.get('/api/sentence/:sentence', function (req, res) {
 // console.log("parser")
 // console.log(Object.keys(Prolog))
 // console.log(Prolog.default.Parser)
-const db = Prolog.default.Parser.parse("cat(mruczek). cat(lohn). cat(heniek). cat(basia). pies(azor). dog(mika). hamster(niuniek).");
+const db = Prolog.default.Parser.parse("cat(mruczek). cat(lohn). cat(heniek). cat(basia). dog(azor). dog(mika). hamster(niuniek). like(azor, mruczek). like(mruczek, azor). liveinpeace(X, Y) :- like(X, Y),like(Y, X).");
 
 // const query = Prolog.default.Parser.parseQuery("cat(mruzek).");
 // // const iter = Prolog.default.Solver.query(db, query);
@@ -118,10 +118,30 @@ function recognizeSentence(sentence){
 		// console.log("wynik prologa", iter.next())
 		return iter.next();
 	}
+
+	result = /^(C|c)zy .* i .* ży.* w poko*/.test(sentence);
+	if(result){
+		
+		console.log("Pytanie o pokój")
+		let newQuestion = sentence.replace("czy ", "");
+		newQuestion = newQuestion.replace("Czy ", "");
+		newQuestion = newQuestion.replace(" żyją w pokoju", "");
+		newQuestion = newQuestion.replace(" żyje w pokoju", "");
+		newQuestion = newQuestion.split('i');
+		
+		const query = Prolog.default.Parser.parseQuery(`liveinpeace(${newQuestion[0].toString()}, ${newQuestion[1].toString()}).`);
+		const iter = Prolog.default.Solver.query(db, query);
+		
+		return iter.next();
+	}
 	
 }
 
-// console.log("dwq",recognizeSentence("czy bartek jest kotem"))
+// console.log("czy zyje w pokoju",recognizeSentence())
+console.log("czy zyje w pokoju");
+const query = Prolog.default.Parser.parseQuery("liveinpeace(mruczek, bartek).");
+const iter = Prolog.default.Solver.query(db, query);
+console.log(iter.next());
 
 // console.log(iter.next())
 // while(iter.next()){
