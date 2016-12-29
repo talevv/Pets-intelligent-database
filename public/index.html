@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<title>Talk</title>
+	<style>
+
+		html, body{
+			margin: 0;
+			padding: 0;
+		}
+
+		html{
+			font-size: 1.5em;
+		}
+
+		body{
+			background: #15E580;
+			cursor: pointer;
+		}
+
+		h1{
+			font-family: sans-serif;
+			color: white;
+			font-size: 2.75rem;
+			font-weight: lighter;
+			line-height: 3rem;
+			margin: 1rem;
+		}
+
+		h2{
+			font-family: sans-serif;
+			color: #F6427F;
+			font-size: 1.75rem;
+			font-weight: lighter;
+			line-height: 2rem;
+			margin: 0;
+			animation-name: scalling;
+			animation-duration: 1s;
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+		}
+
+		.container{
+			height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		}
+
+		.hidden{
+			visibility: hidden;
+		}
+
+		@keyframes scalling{
+			0%{
+				transform: scale(1);
+			}
+
+			50%{
+				transform: scale(1.1);
+			}
+
+			100%{
+				transform: scale(1);
+			}
+		}
+
+	</style>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qwest/4.4.5/qwest.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+	<h1>Click something and talk</h1>
+	<h2 class="hidden">Recording</h2>
+</div>
+
+<script>
+
+	const recognition = new webkitSpeechRecognition();
+	const recordingText = document.querySelector("h2");
+
+	let speech = false;
+
+	recognition.addEventListener("result", function(event){
+		// console.log(event.results[0][0].transcript);
+		const sentence = event.results[0][0].transcript;
+		console.log(sentence)
+		qwest.get(`/api/sentence/${sentence.toString()}`, null, { cache:true })
+    	.then(function(xhr, response) {
+    		alert(response);
+    	});
+
+	});
+
+	recognition.addEventListener("speechend", function(event){		
+		recognition.stop();
+		recordingText.classList.add("hidden");
+		speech = false;
+	});
+
+	document.body.addEventListener("click", function(event){
+		if(!speech){
+			recognition.start();
+			recordingText.classList.remove("hidden");
+		} else{
+			recognition.stop();
+			recordingText.classList.add("hidden");
+		}
+		speech = !speech;
+		
+	});
+
+
+</script>
+</body>
+</html>
