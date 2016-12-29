@@ -37,6 +37,7 @@ function recognizeSentence(sentence){
 		const cats = [];
 		while(iter.next()){
 		    cats.push(iter.current.X);
+		    console.log(iter.current.X)
 		}
 
 		return cats;
@@ -50,6 +51,7 @@ function recognizeSentence(sentence){
 		const dogs = [];
 		while(iter.next()){
 		    dogs.push(iter.current.X);
+		    console.log(iter.current.X)
 		}
 
 		return dogs;
@@ -63,6 +65,7 @@ function recognizeSentence(sentence){
 		const hamsters = [];
 		while(iter.next()){
 		    hamsters.push(iter.current.X);
+		    console.log(iter.current.X)
 		}
 
 		return hamsters;
@@ -138,10 +141,10 @@ function recognizeSentence(sentence){
 }
 
 // console.log("czy zyje w pokoju",recognizeSentence())
-console.log("czy zyje w pokoju");
-const query = Prolog.default.Parser.parseQuery("liveinpeace(mruczek, bartek).");
-const iter = Prolog.default.Solver.query(db, query);
-console.log(iter.next());
+// console.log("czy zyje w pokoju");
+// const query = Prolog.default.Parser.parseQuery("liveinpeace(mruczek, bartek).");
+// const iter = Prolog.default.Solver.query(db, query);
+// console.log(iter.next());
 
 // console.log(iter.next())
 // while(iter.next()){
